@@ -358,21 +358,21 @@
                     <div class="calc-section">
                         <div class="calc-field">
                             <label for="kehadiran">Kehadiran (Attendance) - Max 30</label>
-                            <input type="number" id="kehadiran" min="0" max="30" placeholder="0-30" value="0">
+                            <input type="number" id="kehadiran" min="0" max="30" placeholder="0-30" required>
                         </div>
 
                         <!-- Penilaian Berterusan (20%) -->
                         <div class="calc-field">
                             <label for="penilaian">Penilaian Berterusan (Continuous Assessment) - Max 20</label>
-                            <input type="number" id="penilaian" min="0" max="20" placeholder="0-20" value="0">
+                            <input type="number" id="penilaian" min="0" max="20" placeholder="0-20" required>
                         </div>
                     </div>
 
                     <!-- Penglibatan (20%) -->
                     <div class="calc-field">
                         <label for="penglibatan">Penglibatan (Participation) - Max 20</label>
-                        <select id="penglibatan">
-                            <option value="0">-- Select Level --</option>
+                        <select id="penglibatan" required>
+                            <option value="">-- Select Level --</option>
                             <option value="20">Antara Matrikulasi/Zon/Kebangsaan</option>
                             <option value="17">Peringkat Kolej/Negeri</option>
                             <option value="14">Antara Praktikum</option>
@@ -383,8 +383,8 @@
                     <!-- Pencapaian (20%) -->
                     <div class="calc-field">
                         <label for="pencapaian">Pencapaian (Achievement) - Max 20</label>
-                        <select id="pencapaian">
-                            <option value="0">-- Select Achievement --</option>
+                        <select id="pencapaian" required>
+                            <option value="">-- Select Achievement --</option>
                             <option value="20">Johan (Champion)</option>
                             <option value="19">Naib Johan (Runner-up)</option>
                             <option value="18">Ketiga (Third)</option>
@@ -395,8 +395,8 @@
                     <!-- Jawatan (10%) -->
                     <div class="calc-field">
                         <label for="jawatan">Jawatan (Position) - Max 10</label>
-                        <select id="jawatan">
-                            <option value="0">-- Select Position --</option>
+                        <select id="jawatan" required>
+                            <option value="">-- Select Position --</option>
                             <option value="10">YDP/NYDP/Setiausaha Agong JPP/Bendahari JPP</option>
                             <option value="9">Pengerusi/Ketua Pasukan/Ketua dalam pelbagai aktiviti</option>
                             <option value="8">Timbalan Pengerusi/Setiausaha/Bendahari</option>
@@ -409,8 +409,8 @@
                     <!-- Bonus (10%) -->
                     <div class="calc-field">
                         <label for="bonus">Bonus - Max 10</label>
-                        <select id="bonus">
-                            <option value="0">-- Select Bonus --</option>
+                        <select id="bonus" required>
+                            <option value="">-- Select Bonus --</option>
                             <option value="10">Anugerah Kecemerlangan Kokurikulum/YDP JPP</option>
                             <option value="9">Mewakili 2+ pertandingan peringkat kebangsaan/antarabangsa</option>
                             <option value="8">Terlibat 2+ aktiviti peringkat kolej</option>
@@ -604,15 +604,31 @@
             e.preventDefault();
 
             // Get values
-            let kehadiran = Number(document.getElementById('kehadiran').value) || 0;
-            let penilaian = Number(document.getElementById('penilaian').value) || 0;
-            let penglibatan = Number(document.getElementById('penglibatan').value) || 0;
-            let pencapaian = Number(document.getElementById('pencapaian').value) || 0;
-            let jawatan = Number(document.getElementById('jawatan').value) || 0;
-            let bonus = Number(document.getElementById('bonus').value) || 0;
+            let kehadiran = document.getElementById('kehadiran').value.trim();
+            let penilaian = document.getElementById('penilaian').value.trim();
+            let penglibatan = document.getElementById('penglibatan').value.trim();
+            let pencapaian = document.getElementById('pencapaian').value.trim();
+            let jawatan = document.getElementById('jawatan').value.trim();
+            let bonus = document.getElementById('bonus').value.trim();
 
             let calcError = document.getElementById('calcError');
             let resultDiv = document.getElementById('result');
+
+            // Validate all fields are filled
+            if (kehadiran === '' || penilaian === '' || penglibatan === '' ||
+                pencapaian === '' || jawatan === '' || bonus === '') {
+                calcError.textContent = "Please fill in all fields before calculating.";
+                resultDiv.innerHTML = "";
+                return;
+            }
+
+            // Convert to numbers
+            kehadiran = Number(kehadiran);
+            penilaian = Number(penilaian);
+            penglibatan = Number(penglibatan);
+            pencapaian = Number(pencapaian);
+            jawatan = Number(jawatan);
+            bonus = Number(bonus);
 
             // Validate maximum limits
             if (kehadiran > 30 || penilaian > 20 || penglibatan > 20 ||
