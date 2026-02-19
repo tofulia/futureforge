@@ -4,484 +4,420 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KokuPocket - Merit Calculator</title>
-    
-    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #fdf6f8 0%, #f0e6ff 100%);
-            color: #333;
-            scroll-behavior: smooth;
-            min-height: 100vh;
-        }
-
-        h1, h2, h3 {
-            font-weight: 700;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            background: linear-gradient(135deg, #7aa67a 0%, #5f8d5f 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        h2 {
-            font-size: 2rem;
-            background: linear-gradient(135deg, #7aa67a 0%, #5f8d5f 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        h3 {
-            color: #7aa67a;
-            font-size: 1.3rem;
-        }
-
-        section {
-            padding: 60px 20px;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: auto;
-        }
-
-        nav {
-            background: linear-gradient(135deg, #f8c8dc 0%, #f5b3d4 100%);
-            padding: 20px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 10px 30px rgba(122, 166, 122, 0.1);
-        }
-
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1100px;
-            margin: auto;
-        }
-
-        .nav-container h3 {
-            background: linear-gradient(135deg, #7aa67a 0%, #5f8d5f 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 26px;
-            margin: 0;
-            font-weight: 800;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #333;
-            margin-left: 30px;
-            font-weight: 650;
-            transition: all 0.3s ease;
-            position: relative;
-            font-size: 15px;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 3px;
-            background: linear-gradient(135deg, #7aa67a 0%, #5f8d5f 100%);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .nav-links a:hover {
-            color: #7aa67a;
-            transform: translateY(-2px);
-        }
-
-        .card {
-            background: white;
-            padding: 45px;
-            border-radius: 25px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.08);
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
-            border: 1px solid rgba(122, 166, 122, 0.15);
-        }
-
-        .card:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 30px 60px rgba(122, 166, 122, 0.2);
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        button {
-            background: linear-gradient(135deg, #7aa67a 0%, #5f8d5f 100%);
-            color: white;
-            border: none;
-            padding: 16px 35px;
-            border-radius: 35px;
-            cursor: pointer;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            margin-top: 15px;
-            box-shadow: 0 10px 25px rgba(122, 166, 122, 0.35);
-            font-size: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        button:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 35px rgba(122, 166, 122, 0.5);
-        }
-
-        button:active {
-            transform: translateY(-2px);
-        }
-
-        .clear-btn {
-            background: linear-gradient(135deg, #d9534f 0%, #c9302c 100%);
-            box-shadow: 0 10px 25px rgba(217, 83, 79, 0.35);
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        input, select {
-            padding: 14px 18px;
-            border-radius: 15px;
-            border: 2px solid #e8e8e8;
-            font-size: 15px;
-            transition: all 0.3s ease;
-            background: #f9f9f9;
-            font-weight: 500;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: #7aa67a;
-            background: white;
-            box-shadow: 0 0 0 4px rgba(122, 166, 122, 0.12);
-        }
-
-        .error {
-            color: #c92a2a;
-            font-size: 14px;
-            font-weight: 700;
-            padding: 14px 16px;
-            background: linear-gradient(135deg, #ffe0e0 0%, #ffebeb 100%);
-            border-radius: 12px;
-            border-left: 5px solid #d9534f;
-        }
-
-        .success {
-            color: #2b8a2b;
-            font-size: 14px;
-            font-weight: 700;
-            padding: 14px 16px;
-            background: linear-gradient(135deg, #e0ffe0 0%, #ebffeb 100%);
-            border-radius: 12px;
-            border-left: 5px solid #5cb85c;
-        }
-
-        .result-card {
-            margin-top: 30px;
-            padding: 40px;
-            border-radius: 25px;
-            background: linear-gradient(135deg, #f0fff0 0%, #e8f5e9 100%);
-            text-align: center;
-            font-weight: 600;
-            border: 3px solid #7aa67a;
-            animation: glitter 0.6s ease-in-out;
-            box-shadow: 0 15px 40px rgba(122, 166, 122, 0.25);
-        }
-
-        .result-percentage {
-            font-size: 96px;
-            font-weight: 900;
-            background: linear-gradient(135deg, #7aa67a 0%, #5f8d5f 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin: 25px 0 15px;
-            animation: glitterSpin 0.8s ease-out;
-        }
-
-        @keyframes glitter {
-            0%, 100% {
-                opacity: 1;
-                transform: scale(1);
-                box-shadow: 0 15px 40px rgba(122, 166, 122, 0.25);
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1.05);
-                box-shadow: 0 20px 50px rgba(122, 166, 122, 0.45);
-            }
-        }
-
-        @keyframes glitterSpin {
-            0% {
-                transform: scale(0.4) rotate(-15deg);
-                opacity: 0;
-            }
-            50% {
-                transform: scale(1.15) rotate(8deg);
-            }
-            100% {
-                transform: scale(1) rotate(0deg);
-                opacity: 1;
-            }
-        }
-
-        @keyframes sparkle {
-            0%, 100% {
-                opacity: 0;
-                transform: scale(0);
-            }
-            50% {
-                opacity: 1;
-            }
-        }
-
-        .sparkle {
-            position: absolute;
-            pointer-events: none;
-            font-size: 32px;
-            animation: sparkle 0.6s ease-out forwards;
-        }
-
-        .history-card {
-            background: linear-gradient(135deg, #f9f9f9 0%, #f5f5f5 100%);
-            padding: 18px;
-            border-radius: 15px;
-            border-left: 5px solid #7aa67a;
-            margin-bottom: 15px;
-            font-size: 13px;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.06);
-        }
-
-        .history-card:hover {
-            transform: translateX(8px);
-            box-shadow: 0 8px 20px rgba(122, 166, 122, 0.15);
-        }
-
-        .history-card-title {
-            font-weight: 700;
-            color: #7aa67a;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-
-        .history-card-detail {
-            color: #666;
-            margin: 5px 0;
-            line-height: 1.6;
-        }
-
-        .calc-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-bottom: 25px;
-        }
-
-        .calc-field {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .calc-field label {
-            font-weight: 750;
-            margin-bottom: 10px;
-            color: #7aa67a;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 40px 20px;
-            background: linear-gradient(135deg, #f8c8dc 0%, #f5b3d4 100%);
-            margin-top: 80px;
-            font-weight: 700;
-            color: #555;
-            box-shadow: 0 -10px 30px rgba(0,0,0,0.06);
-        }
-
-        @media (max-width: 768px) {
-            h1 { font-size: 2rem; }
-            h2 { font-size: 1.6rem; }
-            .nav-links { display: flex; flex-direction: column; gap: 12px; }
-            .nav-links a { margin-left: 0; font-size: 14px; }
-            .card { padding: 30px; }
-            .calc-section { grid-template-columns: 1fr; }
-            .result-percentage { font-size: 64px; }
-            button { padding: 14px 28px; font-size: 14px; }
-            .grid { grid-template-columns: 1fr; }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: linear-gradient(135deg, #fdf6f8 0%, #f0e6ff 100%); color: #333; scroll-behavior: smooth; min-height: 100vh; }
+        h1, h2, h3 { font-weight: 700; }
+        h1 { font-size: 2.5rem; background: linear-gradient(135deg, #7aa67a 0%, #5f8d5f 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        h2 { font-size: 2rem; background: linear-gradient(135deg, #7aa67a 0%, #5f8d5f 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        h3 { color: #7aa67a; font-size: 1.3rem; }
+        section { padding: 60px 20px; }
+        .container { max-width: 1100px; margin: auto; }
+        nav { background: linear-gradient(135deg, #f8c8dc 0%, #f5b3d4 100%); padding: 20px 20px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 10px 30px rgba(122, 166, 122, 0.1); }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: auto; }
+        .nav-container h3 { background: linear-gradient(135deg, #7aa67a 0%, #5f8d5f 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 26px; margin: 0; font-weight: 800; }
+        .nav-links { display: flex; gap: 25px; }
+        .nav-links a { text-decoration: none; color: #333; font-weight: 650; transition: all 0.3s ease; position: relative; font-size: 15px; cursor: pointer; }
+        .nav-links a:hover { color: #7aa67a; transform: translateY(-2px); }
+        .nav-button { background: linear-gradient(135deg, #7aa67a 0%, #5f8d5f 100%); color: white; padding: 8px 16px; border-radius: 20px; border: none; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.3s ease; }
+        .nav-button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(122, 166, 122, 0.3); }
+        .card { background: white; padding: 45px; border-radius: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.08); transition: all 0.4s; border: 1px solid rgba(122, 166, 122, 0.15); }
+        .card:hover { transform: translateY(-12px); box-shadow: 0 30px 60px rgba(122, 166, 122, 0.2); }
+        button { background: linear-gradient(135deg, #7aa67a 0%, #5f8d5f 100%); color: white; border: none; padding: 16px 35px; border-radius: 35px; cursor: pointer; font-weight: 700; transition: all 0.3s ease; margin-top: 15px; box-shadow: 0 10px 25px rgba(122, 166, 122, 0.35); font-size: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        button:hover { transform: translateY(-4px); box-shadow: 0 15px 35px rgba(122, 166, 122, 0.5); }
+        form { display: flex; flex-direction: column; gap: 15px; }
+        input, select, textarea { padding: 14px 18px; border-radius: 15px; border: 2px solid #e8e8e8; font-size: 15px; transition: all 0.3s ease; background: #f9f9f9; font-weight: 500; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #7aa67a; background: white; box-shadow: 0 0 0 4px rgba(122, 166, 122, 0.12); }
+        .error { color: #c92a2a; font-size: 14px; font-weight: 700; padding: 14px 16px; background: linear-gradient(135deg, #ffe0e0 0%, #ffebeb 100%); border-radius: 12px; border-left: 5px solid #d9534f; display: none; }
+        .success { color: #2b8a2b; font-size: 14px; font-weight: 700; padding: 14px 16px; background: linear-gradient(135deg, #e0ffe0 0%, #ebffeb 100%); border-radius: 12px; border-left: 5px solid #5cb85c; display: none; }
+        .error.show, .success.show { display: block; }
+        .page { display: none; }
+        .page.active { display: block; }
+        .result-card { margin-top: 30px; padding: 40px; border-radius: 25px; background: linear-gradient(135deg, #f0fff0 0%, #e8f5e9 100%); text-align: center; font-weight: 600; border: 3px solid #7aa67a; animation: glitter 0.6s ease-in-out; box-shadow: 0 15px 40px rgba(122, 166, 122, 0.25); }
+        .result-percentage { font-size: 96px; font-weight: 900; background: linear-gradient(135deg, #7aa67a 0%, #5f8d5f 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 25px 0 15px; animation: glitterSpin 0.8s ease-out; }
+        @keyframes glitter { 0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 15px 40px rgba(122, 166, 122, 0.25); } 50% { opacity: 1; transform: scale(1.05); box-shadow: 0 20px 50px rgba(122, 166, 122, 0.45); } }
+        @keyframes glitterSpin { 0% { transform: scale(0.4) rotate(-15deg); opacity: 0; } 50% { transform: scale(1.15) rotate(8deg); } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
+        @keyframes sparkle { 0%, 100% { opacity: 0; transform: scale(0); } 50% { opacity: 1; } }
+        .sparkle { position: absolute; pointer-events: none; font-size: 32px; animation: sparkle 0.6s ease-out forwards; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .stat-card { background: linear-gradient(135deg, #f0fff0 0%, #e8f5e9 100%); padding: 25px; border-radius: 15px; border-left: 5px solid #7aa67a; text-align: center; }
+        .stat-number { font-size: 2.5rem; font-weight: 800; color: #7aa67a; }
+        .stat-label { color: #666; margin-top: 10px; font-weight: 600; }
+        .history-card { background: linear-gradient(135deg, #f9f9f9 0%, #f5f5f5 100%); padding: 18px; border-radius: 15px; border-left: 5px solid #7aa67a; margin-bottom: 15px; font-size: 13px; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.06); }
+        .history-card:hover { transform: translateX(8px); box-shadow: 0 8px 20px rgba(122, 166, 122, 0.15); }
+        .history-card-title { font-weight: 700; color: #7aa67a; margin-bottom: 10px; font-size: 14px; }
+        .history-card-detail { color: #666; margin: 5px 0; line-height: 1.6; }
+        .calc-field { display: flex; flex-direction: column; }
+        .calc-field label { font-weight: 750; margin-bottom: 10px; color: #7aa67a; font-size: 14px; text-transform: uppercase; letter-spacing: 0.8px; }
+        footer { text-align: center; padding: 40px 20px; background: linear-gradient(135deg, #f8c8dc 0%, #f5b3d4 100%); margin-top: 80px; font-weight: 700; color: #555; box-shadow: 0 -10px 30px rgba(0,0,0,0.06); }
+        .clear-btn { background: linear-gradient(135deg, #d9534f 0%, #c9302c 100%); }
+        .logout-btn { background: linear-gradient(135deg, #d9534f 0%, #c9302c 100%); padding: 8px 16px; font-size: 13px; margin-top: 0; }
+        @media (max-width: 768px) { h1 { font-size: 2rem; } h2 { font-size: 1.6rem; } .nav-links { flex-direction: column; gap: 12px; } .card { padding: 30px; } .result-percentage { font-size: 64px; } button { padding: 14px 28px; font-size: 14px; } .grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="nav-container">
-            <h3>🎯 KokuPocket</h3>
-            <div class="nav-links">
-                <a href="#home">Home</a>
-                <a href="#register">Register</a>
-                <a href="#calculator">Calculator</a>
+    <!-- Login Page -->
+    <div id="loginPage" class="page active">
+        <nav>
+            <div class="nav-container">
+                <h3>🎯 KokuPocket</h3>
             </div>
-        </div>
-    </nav>
-
-    <section id="home">
-        <div class="container">
-            <div class="card">
-                <h1>🏆 Cocurriculum Merit Calculator</h1>
-                <p style="margin-top: 20px; font-size: 16px; line-height: 1.8; color: #666;">
-                    Welcome to <strong>KokuPocket</strong> – your ultimate companion for tracking cocurricular achievements! 
-                    We help students calculate their merit points efficiently through our innovative digital system. 
-                    Register and use our powerful calculator to monitor your progress towards excellence.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <section id="register">
-        <div class="container">
-            <h2 style="margin-bottom: 30px;">📋 Student Registration</h2>
-            <div class="card">
-                <form id="registrationForm">
-                    <input type="text" id="name" placeholder="Full Name" required>
-                    <input type="text" id="matric" placeholder="Matric ID" required>
-                    <input type="text" id="ic" placeholder="Identification Number" required>
-                    <span class="error" id="formError" style="display:none;"></span>
-                    <span class="success" id="formSuccess" style="display:none;"></span>
-                    <button type="submit">✓ Complete Registration</button>
-                </form>
-                
-                <div id="registrationHistory" style="margin-top: 40px; display: none;">
-                    <h3 style="margin-bottom: 20px;">📚 Registration History</h3>
-                    <div id="registrationHistoryContent"></div>
-                    <button type="button" class="clear-btn" onclick="clearRegistrationHistory()">🗑️ Clear History</button>
+        </nav>
+        <section style="padding-top: 100px;">
+            <div class="container">
+                <div class="card" style="max-width: 500px; margin: 0 auto;">
+                    <h2 style="margin-bottom: 30px; text-align: center;">Welcome Back!</h2>
+                    <form id="loginForm">
+                        <input type="text" id="loginMatric" placeholder="Matric ID" required>
+                        <input type="password" id="loginPassword" placeholder="Password" required>
+                        <span class="error" id="loginError"></span>
+                        <button type="submit">Sign In</button>
+                    </form>
+                    <p style="text-align: center; margin-top: 20px; color: #666;">Don't have an account? <a href="#" onclick="showPage('registerPage')" style="color: #7aa67a; font-weight: 700; cursor: pointer;">Create one</a></p>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
 
-    <section id="calculator">
-        <div class="container">
-            <h2 style="margin-bottom: 30px;">⚡ Merit Calculator</h2>
-            <div class="card">
-                <p style="margin-bottom:25px; font-size:15px; color:#666;">
-                    <strong>Formula:</strong> (Total Points ÷ 110) × 10 = Your Merit Score
-                </p>
-                
-                <form id="meritForm">
-                    <div class="calc-section">
-                        <div class="calc-field">
-                            <label for="kehadiran">📍 Kehadiran (Attendance)</label>
-                            <input type="number" id="kehadiran" min="0" max="30" placeholder="0-30" required>
-                        </div>
-
-                        <div class="calc-field">
-                            <label for="penilaian">📊 Penilaian Berterusan</label>
-                            <input type="number" id="penilaian" min="0" max="20" placeholder="0-20" required>
-                        </div>
-                    </div>
-
-                    <div class="calc-field">
-                        <label for="penglibatan">🎭 Penglibatan (Participation)</label>
-                        <select id="penglibatan" required>
-                            <option value="">-- Select Level --</option>
-                            <option value="20">⭐ Antara Matrikulasi/Zon/Kebangsaan</option>
-                            <option value="17">🥇 Peringkat Kolej/Negeri</option>
-                            <option value="14">🥈 Antara Praktikum</option>
-                            <option value="11">🥉 Tutoran/Praktikum/Kolej Kediaman</option>
-                        </select>
-                    </div>
-
-                    <div class="calc-field">
-                        <label for="pencapaian">🏅 Pencapaian (Achievement)</label>
-                        <select id="pencapaian" required>
-                            <option value="">-- Select Achievement --</option>
-                            <option value="20">👑 Johan (Champion)</option>
-                            <option value="19">🎖️ Naib Johan (Runner-up)</option>
-                            <option value="18">🏆 Ketiga (Third)</option>
-                            <option value="15">📜 Participation Certificate</option>
-                        </select>
-                    </div>
-
-                    <div class="calc-field">
-                        <label for="jawatan">💼 Jawatan (Position)</label>
-                        <select id="jawatan" required>
-                            <option value="">-- Select Position --</option>
-                            <option value="10">👨‍💼 YDP/NYDP/Setiausaha Agong JPP</option>
-                            <option value="9">📌 Pengerusi/Ketua Pasukan</option>
-                            <option value="8">📍 Timbalan Pengerusi/Setiausaha</option>
-                            <option value="7">🔑 Ketua Biro/Ahli Jawatankuasa</option>
-                            <option value="6">✅ Ahli Jawatankuasa Program</option>
-                            <option value="5">🤝 Ahli Biasa/Peserta</option>
-                        </select>
-                    </div>
-
-                    <div class="calc-field">
-                        <label for="bonus">🎁 Bonus</label>
-                        <select id="bonus" required>
-                            <option value="">-- Select Bonus --</option>
-                            <option value="10">🌟 Anugerah Kecemerlangan</option>
-                            <option value="9">🚀 Mewakili 2+ Pertandingan Kebangsaan</option>
-                            <option value="8">💫 Terlibat 2+ Aktiviti Kolej</option>
-                            <option value="7">✨ Terlibat 1+ Aktiviti Kolej</option>
-                        </select>
-                    </div>
-
-                    <span class="error" id="calcError" style="display:none;"></span>
-                    <button type="submit">🎯 Calculate My Score</button>
-                </form>
-                
-                <div id="result"></div>
-
-                <div id="calculatorHistory" style="margin-top: 40px; display: none;">
-                    <h3 style="margin-bottom: 20px;">📈 Calculation History</h3>
-                    <div id="calculatorHistoryContent"></div>
-                    <button type="button" class="clear-btn" onclick="clearCalculatorHistory()">🗑️ Clear History</button>
+    <!-- Register Page -->
+    <div id="registerPage" class="page">
+        <nav>
+            <div class="nav-container">
+                <h3>🎯 KokuPocket</h3>
+            </div>
+        </nav>
+        <section style="padding-top: 100px;">
+            <div class="container">
+                <div class="card" style="max-width: 500px; margin: 0 auto;">
+                    <h2 style="margin-bottom: 30px; text-align: center;">Create Account</h2>
+                    <form id="registerForm">
+                        <input type="text" id="regName" placeholder="Full Name" required>
+                        <input type="text" id="regMatric" placeholder="Matric ID" required>
+                        <input type="text" id="regIC" placeholder="Identification Number" required>
+                        <input type="password" id="regPassword" placeholder="Password (min 6 chars)" required>
+                        <span class="error" id="regError"></span>
+                        <span class="success" id="regSuccess"></span>
+                        <button type="submit">Create Account</button>
+                    </form>
+                    <p style="text-align: center; margin-top: 20px; color: #666;">Already have an account? <a href="#" onclick="showPage('loginPage')" style="color: #7aa67a; font-weight: 700; cursor: pointer;">Sign In</a></p>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
+
+    <!-- Calculator Page (After Login) -->
+    <div id="calculatorPage" class="page">
+        <nav>
+            <div class="nav-container">
+                <h3>🎯 KokuPocket</h3>
+                <div class="nav-links">
+                    <a href="#" onclick="showPage('dashboardPage')">📊 Dashboard</a>
+                    <a href="#" onclick="showPage('calculatorPage')">⚡ Calculator</a>
+                    <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+                </div>
+            </div>
+        </nav>
+        <section>
+            <div class="container">
+                <h2 style="margin-bottom: 30px;">⚡ Merit Calculator</h2>
+                <div class="card">
+                    <p style="margin-bottom:25px; font-size:15px; color:#666;">
+                        <strong>Formula:</strong> (Total Points ÷ 110) × 10 = Your Merit Score
+                    </p>
+                    <form id="meritForm">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 25px;">
+                            <div class="calc-field">
+                                <label for="kehadiran">📍 Kehadiran (Attendance)</label>
+                                <input type="number" id="kehadiran" min="0" max="30" placeholder="0-30" required>
+                            </div>
+                            <div class="calc-field">
+                                <label for="penilaian">📊 Penilaian Berterusan</label>
+                                <input type="number" id="penilaian" min="0" max="20" placeholder="0-20" required>
+                            </div>
+                        </div>
+                        <div class="calc-field">
+                            <label for="penglibatan">🎭 Penglibatan (Participation)</label>
+                            <select id="penglibatan" required>
+                                <option value="">-- Select Level --</option>
+                                <option value="20">⭐ Antara Matrikulasi/Zon/Kebangsaan</option>
+                                <option value="17">🥇 Peringkat Kolej/Negeri</option>
+                                <option value="14">🥈 Antara Praktikum</option>
+                                <option value="11">🥉 Tutoran/Praktikum/Kolej Kediaman</option>
+                            </select>
+                        </div>
+                        <div class="calc-field">
+                            <label for="pencapaian">🏅 Pencapaian (Achievement)</label>
+                            <select id="pencapaian" required>
+                                <option value="">-- Select Achievement --</option>
+                                <option value="20">👑 Johan (Champion)</option>
+                                <option value="19">🎖️ Naib Johan (Runner-up)</option>
+                                <option value="18">🏆 Ketiga (Third)</option>
+                                <option value="15">📜 Participation Certificate</option>
+                            </select>
+                        </div>
+                        <div class="calc-field">
+                            <label for="jawatan">💼 Jawatan (Position)</label>
+                            <select id="jawatan" required>
+                                <option value="">-- Select Position --</option>
+                                <option value="10">👨‍💼 YDP/NYDP/Setiausaha Agong JPP</option>
+                                <option value="9">📌 Pengerusi/Ketua Pasukan</option>
+                                <option value="8">📍 Timbalan Pengerusi/Setiausaha</option>
+                                <option value="7">🔑 Ketua Biro/Ahli Jawatankuasa</option>
+                                <option value="6">✅ Ahli Jawatankuasa Program</option>
+                                <option value="5">🤝 Ahli Biasa/Peserta</option>
+                            </select>
+                        </div>
+                        <div class="calc-field">
+                            <label for="bonus">🎁 Bonus</label>
+                            <select id="bonus" required>
+                                <option value="">-- Select Bonus --</option>
+                                <option value="10">🌟 Anugerah Kecemerlangan</option>
+                                <option value="9">🚀 Mewakili 2+ Pertandingan Kebangsaan</option>
+                                <option value="8">💫 Terlibat 2+ Aktiviti Kolej</option>
+                                <option value="7">✨ Terlibat 1+ Aktiviti Kolej</option>
+                            </select>
+                        </div>
+                        <span class="error" id="calcError"></span>
+                        <button type="submit">🎯 Calculate My Score</button>
+                    </form>
+                    <div id="result"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div id="dashboardPage" class="page">
+        <nav>
+            <div class="nav-container">
+                <h3>🎯 KokuPocket</h3>
+                <div class="nav-links">
+                    <a href="#" onclick="showPage('dashboardPage')">📊 Dashboard</a>
+                    <a href="#" onclick="showPage('calculatorPage')">⚡ Calculator</a>
+                    <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+                </div>
+            </div>
+        </nav>
+        <section>
+            <div class="container">
+                <h2 style="margin-bottom: 30px;">📊 Your Dashboard</h2>
+                <div id="dashboardContent">Loading...</div>
+            </div>
+        </section>
+    </div>
 
     <footer>
         © 2026 KokuPocket | Merit Innovation System | Empowering Student Excellence
     </footer>
 
     <script>
-        let studentCount = 0;
+        const API_URL = 'http://localhost:5000/api';
+        let currentUser = null;
+        let authToken = localStorage.getItem('authToken');
+        let currentUserId = localStorage.getItem('userId');
+
+        function showPage(pageName) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById(pageName).classList.add('active');
+            if (pageName === 'dashboardPage') loadDashboard();
+        }
+
+        function setError(elementId, message) {
+            const el = document.getElementById(elementId);
+            el.textContent = message;
+            el.classList.add('show');
+            setTimeout(() => el.classList.remove('show'), 5000);
+        }
+
+        function setSuccess(elementId, message) {
+            const el = document.getElementById(elementId);
+            el.textContent = message;
+            el.classList.add('show');
+            setTimeout(() => el.classList.remove('show'), 5000);
+        }
+
+        // Register
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('regName').value.trim();
+            const matric = document.getElementById('regMatric').value.trim();
+            const ic = document.getElementById('regIC').value.trim();
+            const password = document.getElementById('regPassword').value.trim();
+
+            if (password.length < 6) {
+                setError('regError', '❌ Password must be at least 6 characters');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, matric, ic, password })
+                });
+
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    setError('regError', `❌ ${data.error}`);
+                    return;
+                }
+
+                setSuccess('regSuccess', '✅ Account created! Redirecting...');
+                authToken = data.token;
+                currentUserId = data.userId;
+                currentUser = { name, matric };
+                localStorage.setItem('authToken', authToken);
+                localStorage.setItem('userId', currentUserId);
+                localStorage.setItem('userName', name);
+
+                setTimeout(() => showPage('calculatorPage'), 1500);
+            } catch (error) {
+                setError('regError', `❌ Error: ${error.message}`);
+            }
+        });
+
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const matric = document.getElementById('loginMatric').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ matric, password })
+                });
+
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    setError('loginError', `❌ ${data.error}`);
+                    return;
+                }
+
+                authToken = data.token;
+                currentUserId = data.userId;
+                currentUser = { name: data.name, matric: data.matric };
+                localStorage.setItem('authToken', authToken);
+                localStorage.setItem('userId', currentUserId);
+                localStorage.setItem('userName', data.name);
+
+                showPage('calculatorPage');
+            } catch (error) {
+                setError('loginError', `❌ Error: ${error.message}`);
+            }
+        });
+
+        // Calculate
+        document.getElementById('meritForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const kehadiran = Number(document.getElementById('kehadiran').value);
+            const penilaian = Number(document.getElementById('penilaian').value);
+            const penglibatan = Number(document.getElementById('penglibatan').value);
+            const pencapaian = Number(document.getElementById('pencapaian').value);
+            const jawatan = Number(document.getElementById('jawatan').value);
+            const bonus = Number(document.getElementById('bonus').value);
+
+            if (!kehadiran || !penilaian || !penglibatan || !pencapaian || !jawatan || !bonus) {
+                setError('calcError', '❌ Please fill in all fields');
+                return;
+            }
+
+            const total = kehadiran + penilaian + penglibatan + pencapaian + jawatan + bonus;
+            const finalPercent = ((total / 110) * 10).toFixed(2);
+
+            try {
+                const response = await fetch(`${API_URL}/calc/calculate`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({ kehadiran, penilaian, penglibatan, pencapaian, jawatan, bonus, total, finalPercent })
+                });
+
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error);
+
+                const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = `
+                    <div class="result-card">
+                        <div style="margin-bottom: 20px; font-size: 15px;">
+                            <div>📍 Kehadiran: <strong>${kehadiran}</strong>/30</div>
+                            <div>📊 Penilaian: <strong>${penilaian}</strong>/20</div>
+                            <div>🎭 Penglibatan: <strong>${penglibatan}</strong>/20</div>
+                            <div>🏅 Pencapaian: <strong>${pencapaian}</strong>/20</div>
+                            <div>💼 Jawatan: <strong>${jawatan}</strong>/10</div>
+                            <div>🎁 Bonus: <strong>${bonus}</strong>/10</div>
+                        </div>
+                        <hr style="margin: 20px 0; border: none; border-top: 2px solid rgba(122, 166, 122, 0.3);">
+                        <div style="margin-bottom: 15px;">📊 Total Points: <strong>${total}</strong> / 110</div>
+                        <div class="result-percentage">${finalPercent}%</div>
+                        <div style="font-size: 18px; color: #7aa67a; font-weight: 700;">✨ Your Cocurriculum Merit Score ✨</div>
+                    </div>
+                `;
+                createSparkles(resultDiv);
+            } catch (error) {
+                setError('calcError', `❌ ${error.message}`);
+            }
+        });
+
+        async function loadDashboard() {
+            try {
+                const response = await fetch(`${API_URL}/calc/dashboard`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error);
+
+                const stats = data.stats;
+                const html = `
+                    <div class="card" style="margin-bottom: 30px;">
+                        <h3>👤 Welcome, ${data.user.name}!</h3>
+                        <p style="color: #666; margin-top: 10px;">Matric: <strong>${data.user.matric}</strong></p>
+                    </div>
+                    <h3 style="margin: 30px 0 20px;">📈 Your Statistics</h3>
+                    <div class="grid">
+                        <div class="stat-card">
+                            <div class="stat-number">${stats.totalCalculations}</div>
+                            <div class="stat-label">Total Calculations</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">${stats.averageScore || 0}</div>
+                            <div class="stat-label">Average Score (%)</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">${stats.highestScore || 0}</div>
+                            <div class="stat-label">Highest Score (%)</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">${stats.lowestScore || 0}</div>
+                            <div class="stat-label">Lowest Score (%)</div>
+                        </div>
+                    </div>
+                    <h3 style="margin: 40px 0 20px;">📋 Calculation History</h3>
+                    <div class="card">
+                        ${data.calculations.length > 0 ? data.calculations.map((calc, i) => `
+                            <div class="history-card">
+                                <div class="history-card-title">Calculation #${i + 1} - Score: ${calc.finalPercent}% 🎯</div>
+                                <div class="history-card-detail"><strong>Total:</strong> ${calc.total}/110 points</div>
+                                <div class="history-card-detail">Details: Kehadiran ${calc.kehadiran} | Penilaian ${calc.penilaian} | Penglibatan ${calc.penglibatan} | Pencapaian ${calc.pencapaian} | Jawatan ${calc.jawatan} | Bonus ${calc.bonus}</div>
+                                <div class="history-card-detail"><strong>Date:</strong> ${new Date(calc.timestamp).toLocaleString()}</div>
+                            </div>
+                        `).join('') : '<p style="color: #999;">No calculations yet. Start calculating to see your history!</p>'}
+                    </div>
+                `;
+                document.getElementById('dashboardContent').innerHTML = html;
+            } catch (error) {
+                console.error('Dashboard error:', error);
+                document.getElementById('dashboardContent').innerHTML = `<div class="card"><p style="color: red;">Error loading dashboard: ${error.message}</p></div>`;
+            }
+        }
 
         function createSparkles(container) {
             const sparkles = ['✨', '⭐', '💫', '🌟', '⚡'];
@@ -497,131 +433,21 @@
             }
         }
 
-        function loadDeviceData() {
-            const registrations = JSON.parse(localStorage.getItem('registrations')) || [];
-            const calculations = JSON.parse(localStorage.getItem('calculations')) || [];
-            if (registrations.length > 0) displayRegistrationHistory(registrations);
-            if (calculations.length > 0) displayCalculatorHistory(calculations);
+        function logout() {
+            authToken = null;
+            currentUser = null;
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('userName');
+            document.getElementById('loginMatric').value = '';
+            document.getElementById('loginPassword').value = '';
+            showPage('loginPage');
         }
 
-        function displayRegistrationHistory(registrations) {
-            const historyDiv = document.getElementById('registrationHistory');
-            const contentDiv = document.getElementById('registrationHistoryContent');
-            contentDiv.innerHTML = '';
-            registrations.forEach((reg, index) => {
-                const regCard = document.createElement('div');
-                regCard.className = 'history-card';
-                regCard.innerHTML = `<div class="history-card-title">#${index + 1} – ${reg.name} 👤</div>
-                    <div class="history-card-detail"><strong>Matric:</strong> ${reg.matric}</div>
-                    <div class="history-card-detail"><strong>IC:</strong> ${reg.ic}</div>
-                    <div class="history-card-detail"><strong>Registered:</strong> ${new Date(reg.timestamp).toLocaleString()}</div>`;
-                contentDiv.appendChild(regCard);
-            });
-            historyDiv.style.display = 'block';
+        // Check if already logged in
+        if (authToken && currentUserId) {
+            showPage('calculatorPage');
         }
-
-        function displayCalculatorHistory(calculations) {
-            const historyDiv = document.getElementById('calculatorHistory');
-            const contentDiv = document.getElementById('calculatorHistoryContent');
-            contentDiv.innerHTML = '';
-            calculations.forEach((calc, index) => {
-                const calcCard = document.createElement('div');
-                calcCard.className = 'history-card';
-                calcCard.innerHTML = `<div class="history-card-title">#${index + 1} – Score: ${calc.finalPercent}% 🎯</div>
-                    <div class="history-card-detail"><strong>Total:</strong> ${calc.total}/110</div>
-                    <div class="history-card-detail">Kehadiran: ${calc.kehadiran} | Penilaian: ${calc.penilaian} | Penglibatan: ${calc.penglibatan} | Pencapaian: ${calc.pencapaian}</div>
-                    <div class="history-card-detail">Jawatan: ${calc.jawatan} | Bonus: ${calc.bonus} | Calculated: ${new Date(calc.timestamp).toLocaleString()}</div>`;
-                contentDiv.appendChild(calcCard);
-            });
-            historyDiv.style.display = 'block';
-        }
-
-        function clearRegistrationHistory() {
-            if (confirm('Clear all registration history?')) {
-                localStorage.removeItem('registrations');
-                document.getElementById('registrationHistory').style.display = 'none';
-            }
-        }
-
-        function clearCalculatorHistory() {
-            if (confirm('Clear all calculation history?')) {
-                localStorage.removeItem('calculations');
-                document.getElementById('calculatorHistory').style.display = 'none';
-            }
-        }
-
-        document.getElementById('registrationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            let name = document.getElementById('name').value.trim();
-            let matric = document.getElementById('matric').value.trim();
-            let ic = document.getElementById('ic').value.trim();
-            let formError = document.getElementById('formError');
-            let formSuccess = document.getElementById('formSuccess');
-
-            if (matric.length < 4) {
-                formError.textContent = "❌ Matric ID must be at least 4 characters.";
-                formError.style.display = 'block';
-                return;
-            }
-            formError.style.display = 'none';
-            formSuccess.textContent = "✅ Registration Successful! Welcome, " + name + "!";
-            formSuccess.style.display = 'block';
-            const registrations = JSON.parse(localStorage.getItem('registrations')) || [];
-            registrations.push({name, matric, ic, timestamp: new Date().toISOString()});
-            localStorage.setItem('registrations', JSON.stringify(registrations));
-            displayRegistrationHistory(registrations);
-            this.reset();
-            setTimeout(() => { formSuccess.style.display = 'none'; }, 4000);
-        });
-
-        document.getElementById('meritForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            let kehadiran = document.getElementById('kehadiran').value.trim();
-            let penilaian = document.getElementById('penilaian').value.trim();
-            let penglibatan = document.getElementById('penglibatan').value.trim();
-            let pencapaian = document.getElementById('pencapaian').value.trim();
-            let jawatan = document.getElementById('jawatan').value.trim();
-            let bonus = document.getElementById('bonus').value.trim();
-            let calcError = document.getElementById('calcError');
-            let resultDiv = document.getElementById('result');
-
-            if (!kehadiran || !penilaian || !penglibatan || !pencapaian || !jawatan || !bonus) {
-                calcError.textContent = "❌ Please fill in all fields before calculating.";
-                calcError.style.display = 'block';
-                resultDiv.innerHTML = "";
-                return;
-            }
-
-            kehadiran = Number(kehadiran); penilaian = Number(penilaian); penglibatan = Number(penglibatan);
-            pencapaian = Number(pencapaian); jawatan = Number(jawatan); bonus = Number(bonus);
-
-            if (kehadiran > 30 || penilaian > 20 || penglibatan > 20 || pencapaian > 20 || jawatan > 10 || bonus > 10) {
-                calcError.textContent = "❌ Values exceed maximum marks.";
-                calcError.style.display = 'block';
-                return;
-            }
-            calcError.style.display = 'none';
-            let total = kehadiran + penilaian + penglibatan + pencapaian + jawatan + bonus;
-            let finalPercent = (total / 110) * 10;
-            const calculations = JSON.parse(localStorage.getItem('calculations')) || [];
-            calculations.push({kehadiran, penilaian, penglibatan, pencapaian, jawatan, bonus, total, finalPercent: finalPercent.toFixed(2), timestamp: new Date().toISOString()});
-            localStorage.setItem('calculations', JSON.stringify(calculations));
-            displayCalculatorHistory(calculations);
-            resultDiv.innerHTML = `<div class="result-card"><div style="margin-bottom: 20px; font-size: 15px;">
-                <div>📍 Kehadiran: <strong>${kehadiran}</strong>/30</div>
-                <div>📊 Penilaian Berterusan: <strong>${penilaian}</strong>/20</div>
-                <div>🎭 Penglibatan: <strong>${penglibatan}</strong>/20</div>
-                <div>🏅 Pencapaian: <strong>${pencapaian}</strong>/20</div>
-                <div>💼 Jawatan: <strong>${jawatan}</strong>/10</div>
-                <div>🎁 Bonus: <strong>${bonus}</strong>/10</div>
-                </div><hr style="margin: 20px 0; border: none; border-top: 2px solid rgba(122, 166, 122, 0.3);">
-                <div style="margin-bottom: 15px;">📊 Total Points: <strong>${total}</strong> / 110</div>
-                <div class="result-percentage">${finalPercent.toFixed(2)}%</div>
-                <div style="font-size: 18px; color: #7aa67a; font-weight: 700;">✨ Your Cocurriculum Merit Score ✨</div></div>`;
-            createSparkles(resultDiv);
-        });
-
-        document.addEventListener('DOMContentLoaded', loadDeviceData);
     </script>
 
 </body>
