@@ -173,6 +173,40 @@
         }
 
         /* ==============================
+           HISTORY SECTION
+        ============================== */
+        .history-card {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #7aa67a;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .history-card-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .history-card-detail {
+            color: #666;
+            margin: 3px 0;
+        }
+
+        .clear-btn {
+            background-color: #d9534f;
+            padding: 8px 15px;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        .clear-btn:hover {
+            background-color: #c9302c;
+        }
+
+        /* ==============================
            FOOTER
         ============================== */
         footer {
@@ -245,6 +279,13 @@
                     <span class="success" id="formSuccess"></span>
                     <button type="submit">Submit Registration</button>
                 </form>
+                
+                <!-- Registration History -->
+                <div id="registrationHistory" style="margin-top: 30px; display: none;">
+                    <h3>Your Registrations</h3>
+                    <div id="registrationHistoryContent"></div>
+                    <button type="button" class="clear-btn" onclick="clearRegistrationHistory()">Clear History</button>
+                </div>
             </div>
         </div>
     </section>
@@ -330,6 +371,13 @@
                 </form>
                 
                 <div id="result"></div>
+
+                <!-- Calculator History -->
+                <div id="calculatorHistory" style="margin-top: 30px; display: none;">
+                    <h3>Calculation History</h3>
+                    <div id="calculatorHistoryContent"></div>
+                    <button type="button" class="clear-btn" onclick="clearCalculatorHistory()">Clear History</button>
+                </div>
             </div>
         </div>
     </section>
@@ -344,6 +392,90 @@
     <script>
         // Store total registrations
         let studentCount = 0;
+
+        // ==============================
+        // LOAD DATA FROM LOCALSTORAGE
+        // ==============================
+        function loadDeviceData() {
+            const registrations = JSON.parse(localStorage.getItem('registrations')) || [];
+            const calculations = JSON.parse(localStorage.getItem('calculations')) || [];
+            
+            if (registrations.length > 0) {
+                displayRegistrationHistory(registrations);
+            }
+            if (calculations.length > 0) {
+                displayCalculatorHistory(calculations);
+            }
+        }
+
+        // ==============================
+        // DISPLAY REGISTRATION HISTORY
+        // ==============================
+        function displayRegistrationHistory(registrations) {
+            const historyDiv = document.getElementById('registrationHistory');
+            const contentDiv = document.getElementById('registrationHistoryContent');
+            
+            contentDiv.innerHTML = '';
+            registrations.forEach((reg, index) => {
+                const regCard = document.createElement('div');
+                regCard.className = 'history-card';
+                regCard.innerHTML = `
+                    <div class="history-card-title">#${index + 1} - ${reg.name}</div>
+                    <div class="history-card-detail"><strong>Matric:</strong> ${reg.matric}</div>
+                    <div class="history-card-detail"><strong>IC:</strong> ${reg.ic}</div>
+                    <div class="history-card-detail"><strong>Date:</strong> ${new Date(reg.timestamp).toLocaleString()}</div>
+                `;
+                contentDiv.appendChild(regCard);
+            });
+            
+            historyDiv.style.display = 'block';
+        }
+
+        // ==============================
+        // DISPLAY CALCULATOR HISTORY
+        // ==============================
+        function displayCalculatorHistory(calculations) {
+            const historyDiv = document.getElementById('calculatorHistory');
+            const contentDiv = document.getElementById('calculatorHistoryContent');
+            
+            contentDiv.innerHTML = '';
+            calculations.forEach((calc, index) => {
+                const calcCard = document.createElement('div');
+                calcCard.className = 'history-card';
+                calcCard.innerHTML = `
+                    <div class="history-card-title">#${index + 1} - Score: ${calc.finalPercent}%</div>
+                    <div class="history-card-detail"><strong>Total Points:</strong> ${calc.total}/110</div>
+                    <div class="history-card-detail">Kehadiran: ${calc.kehadiran} | Penilaian: ${calc.penilaian} | Penglibatan: ${calc.penglibatan}</div>
+                    <div class="history-card-detail">Pencapaian: ${calc.pencapaian} | Jawatan: ${calc.jawatan} | Bonus: ${calc.bonus}</div>
+                    <div class="history-card-detail"><strong>Date:</strong> ${new Date(calc.timestamp).toLocaleString()}</div>
+                `;
+                contentDiv.appendChild(calcCard);
+            });
+            
+            historyDiv.style.display = 'block';
+        }
+
+        // ==============================
+        // CLEAR REGISTRATION HISTORY
+        // ==============================
+        function clearRegistrationHistory() {
+            if (confirm('Are you sure you want to clear all registration history?')) {
+                localStorage.removeItem('registrations');
+                document.getElementById('registrationHistory').style.display = 'none';
+                document.getElementById('registrationHistoryContent').innerHTML = '';
+            }
+        }
+
+        // ==============================
+        // CLEAR CALCULATOR HISTORY
+        // ==============================
+        function clearCalculatorHistory() {
+            if (confirm('Are you sure you want to clear all calculation history?')) {
+                localStorage.removeItem('calculations');
+                document.getElementById('calculatorHistory').style.display = 'none';
+                document.getElementById('calculatorHistoryContent').innerHTML = '';
+            }
+        }
 
         // ==============================
         // REGISTRATION FORM VALIDATION
@@ -372,6 +504,20 @@
             formError.textContent = "";
             formSuccess.textContent = "Registration Successful! Thank you " + name + ".";
             studentCount++;
+
+            // Save to localStorage
+            const registrations = JSON.parse(localStorage.getItem('registrations')) || [];
+            registrations.push({
+                name: name,
+                matric: matric,
+                ic: ic,
+                timestamp: new Date().toISOString()
+            });
+            localStorage.setItem('registrations', JSON.stringify(registrations));
+
+            // Display updated history
+            displayRegistrationHistory(registrations);
+
             this.reset();
 
             // Clear success message after 3 seconds
@@ -421,6 +567,24 @@
             // Convert to 10%
             let finalPercent = (total / 110) * 10;
 
+            // Save to localStorage
+            const calculations = JSON.parse(localStorage.getItem('calculations')) || [];
+            calculations.push({
+                kehadiran: kehadiran,
+                penilaian: penilaian,
+                penglibatan: penglibatan,
+                pencapaian: pencapaian,
+                jawatan: jawatan,
+                bonus: bonus,
+                total: total,
+                finalPercent: finalPercent.toFixed(2),
+                timestamp: new Date().toISOString()
+            });
+            localStorage.setItem('calculations', JSON.stringify(calculations));
+
+            // Display updated history
+            displayCalculatorHistory(calculations);
+
             resultDiv.innerHTML = `
                 <div class="result-card">
                     <div style="margin-bottom: 15px;">
@@ -439,6 +603,9 @@
                 </div>
             `;
         });
+
+        // Load data when page loads
+        document.addEventListener('DOMContentLoaded', loadDeviceData);
     </script>
 
 </body>
