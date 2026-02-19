@@ -152,6 +152,58 @@
             text-align: center;
             font-weight: 600;
             border-left: 5px solid #7aa67a;
+            animation: glitter 0.6s ease-in-out;
+        }
+
+        .result-percentage {
+            font-size: 72px;
+            font-weight: 800;
+            color: #7aa67a;
+            margin: 20px 0;
+            animation: glitterSpin 0.8s ease-out;
+        }
+
+        @keyframes glitter {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+                box-shadow: 0 0 0 rgba(122, 166, 122, 0);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+                box-shadow: 0 0 30px rgba(122, 166, 122, 0.6);
+            }
+        }
+
+        @keyframes glitterSpin {
+            0% {
+                transform: scale(0.5) rotate(-10deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1) rotate(5deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes sparkle {
+            0%, 100% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .sparkle {
+            position: absolute;
+            pointer-events: none;
+            font-size: 24px;
+            animation: sparkle 0.6s ease-out forwards;
         }
 
         .calc-section {
@@ -394,6 +446,25 @@
         let studentCount = 0;
 
         // ==============================
+        // CREATE SPARKLE EFFECT
+        // ==============================
+        function createSparkles(container) {
+            const sparkles = ['✨', '⭐', '💫', '🌟'];
+            for (let i = 0; i < 8; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.textContent = sparkles[Math.floor(Math.random() * sparkles.length)];
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = (i * 0.1) + 's';
+                container.appendChild(sparkle);
+
+                // Remove sparkle after animation
+                setTimeout(() => sparkle.remove(), 700);
+            }
+        }
+
+        // ==============================
         // LOAD DATA FROM LOCALSTORAGE
         // ==============================
         function loadDeviceData() {
@@ -596,12 +667,18 @@
                         <div>Bonus: ${bonus}/10</div>
                     </div>
                     <hr style="margin: 15px 0; border: none; border-top: 1px solid #ccc;">
-                    <div style="font-size: 18px;">
-                        Total Points: <strong>${total}</strong> / 110 <br><br>
-                        Final Cocurriculum Merit: <strong>${finalPercent.toFixed(2)}%</strong>
+                    <div>
+                        Total Points: <strong>${total}</strong> / 110
+                    </div>
+                    <div class="result-percentage">${finalPercent.toFixed(2)}%</div>
+                    <div style="font-size: 16px; color: #666;">
+                        Final Cocurriculum Merit
                     </div>
                 </div>
             `;
+
+            // Create sparkle effect
+            createSparkles(resultDiv);
         });
 
         // Load data when page loads
